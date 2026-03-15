@@ -1,10 +1,9 @@
 class MatCli < Formula
   desc "Headless Java heap analyzer for Eclipse Memory Analyzer"
   homepage "https://github.com/Demogorgon314/mat-cli"
-  version "0.1.0"
-  revision 1
-  url "https://github.com/Demogorgon314/mat-cli/releases/download/v0.1.0/mat-cli-v0.1.0.zip"
-  sha256 "3be1773b6a550bcadccd67b89c1f0d9f7e1f197e18e944ca8c2b7225c7aa56c9"
+  version "0.1.1"
+  url "https://github.com/Demogorgon314/mat-cli/releases/download/v0.1.1/mat-cli-v0.1.1.zip"
+  sha256 "78d494ef4442fa7e4efb965d23a1cad11b543da45585ca47ccd6ee7d1273311a"
   license "EPL-2.0"
 
   livecheck do
