@@ -23,6 +23,13 @@ fi
 asset_url="$(jq -r '.browser_download_url' <<<"${asset_json}")"
 sha256="$(jq -r '.digest // "" | sub("^sha256:"; "")' <<<"${asset_json}")"
 version="${tag_name#v}"
+current_version=""
+current_revision=""
+
+if [[ -f "${FORMULA_PATH}" ]]; then
+  current_version="$(sed -n 's/^  version "\(.*\)"/\1/p' "${FORMULA_PATH}" | head -n 1)"
+  current_revision="$(sed -n 's/^  revision \(.*\)$/\1/p' "${FORMULA_PATH}" | head -n 1)"
+fi
 
 if [[ -z "${sha256}" ]]; then
   tmp_file="$(mktemp)"
@@ -36,6 +43,15 @@ class MatCli < Formula
   desc "Headless Java heap analyzer for Eclipse Memory Analyzer"
   homepage "https://github.com/${SOURCE_REPO}"
   version "${version}"
+EOF
+
+if [[ "${current_version}" == "${version}" && -n "${current_revision}" ]]; then
+  cat >> "${FORMULA_PATH}" <<EOF
+  revision ${current_revision}
+EOF
+fi
+
+cat >> "${FORMULA_PATH}" <<EOF
   url "${asset_url}"
   sha256 "${sha256}"
   license "EPL-2.0"
@@ -49,7 +65,7 @@ class MatCli < Formula
 
   def install
     libexec.install Dir["*"]
-    (bin/"mat-cli").write_env_script libexec/"mat-cli"/"mat-cli",
+    (bin/"mat-cli").write_env_script libexec/"mat-cli",
                                      Language::Java.overridable_java_home_env("17")
   end
 
