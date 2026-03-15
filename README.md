@@ -15,10 +15,15 @@ brew update
 brew upgrade mat-cli
 ```
 
-## Maintenance
+## How It Updates
 
-The tap includes a scheduled GitHub Actions workflow that checks
-`Demogorgon314/mat-cli` for the latest release and updates
-`Formula/mat-cli.rb` automatically when a new zip asset is published.
+New `mat-cli` releases in
+[`Demogorgon314/mat-cli`](https://github.com/Demogorgon314/mat-cli)
+trigger this tap's `update-formula.yml` workflow, which refreshes
+`Formula/mat-cli.rb` and pushes the change back to this repository.
 
-You can also run the workflow manually from the Actions tab.
+## Manual Recovery
+
+If the automatic trigger is missed, run the `Update Formula` workflow
+from the Actions tab in this repository to regenerate the formula from
+the latest GitHub release.
