@@ -65,12 +65,26 @@ cat >> "${FORMULA_PATH}" <<EOF
 
   def install
     libexec.install Dir["*"]
+    inreplace libexec/"mat-cli" do |script|
+      script.sub!(<<~'SH', "")
+        if ! CDPATH= cd -- "\$DIR"; then
+            echo "Unable to change directory to \$DIR" >&2
+            exit 1
+        fi
+
+      SH
+    end
     (bin/"mat-cli").write_env_script libexec/"mat-cli",
                                      Language::Java.overridable_java_home_env("17")
   end
 
   test do
     assert_match "mat-cli", shell_output("#{bin}/mat-cli --help")
+    (testpath/"query.oql").write("SELECT * FROM java.lang.String\n")
+    output = shell_output("#{bin}/mat-cli oql ./missing.hprof --query-file ./query.oql 2>&1", 3)
+
+    assert_match %r{Heap dump not found: #{Regexp.escape(testpath.to_s)}/\./missing\.hprof}, output
+    refute_match %r{/libexec/}, output
   end
 end
 EOF
