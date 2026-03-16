@@ -1,9 +1,9 @@
 class MatCli < Formula
   desc "Headless Java heap analyzer for Eclipse Memory Analyzer"
   homepage "https://github.com/Demogorgon314/mat-cli"
-  version "0.1.1"
-  url "https://github.com/Demogorgon314/mat-cli/releases/download/v0.1.1/mat-cli-v0.1.1.zip"
-  sha256 "78d494ef4442fa7e4efb965d23a1cad11b543da45585ca47ccd6ee7d1273311a"
+  version "0.1.2"
+  url "https://github.com/Demogorgon314/mat-cli/releases/download/v0.1.2/mat-cli-v0.1.2.zip"
+  sha256 "16d296f114b5f27e4060760ea09a24e9f4c2b3223e1cd9268a213e490a7949de"
   license "EPL-2.0"
 
   livecheck do
@@ -30,7 +30,6 @@ class MatCli < Formula
 
   test do
     assert_match "mat-cli", shell_output("#{bin}/mat-cli --help")
-
     (testpath/"query.oql").write("SELECT * FROM java.lang.String\n")
     output = shell_output("#{bin}/mat-cli oql ./missing.hprof --query-file ./query.oql 2>&1", 3)
 
