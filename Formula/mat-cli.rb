@@ -15,15 +15,15 @@ class MatCli < Formula
 
   def install
     libexec.install Dir["*"]
-    inreplace libexec/"mat-cli" do |script|
-      script.sub!(<<~'SH', "")
-        if ! CDPATH= cd -- "$DIR"; then
-            echo "Unable to change directory to $DIR" >&2
-            exit 1
-        fi
+    old_cwd_snippet = <<~'SH'
+      if ! CDPATH= cd -- "$DIR"; then
+          echo "Unable to change directory to $DIR" >&2
+          exit 1
+      fi
 
-      SH
-    end
+    SH
+    launcher = libexec/"mat-cli"
+    inreplace launcher, old_cwd_snippet, "" if launcher.read.include?(old_cwd_snippet)
     (bin/"mat-cli").write_env_script libexec/"mat-cli",
                                      Language::Java.overridable_java_home_env("17")
   end
